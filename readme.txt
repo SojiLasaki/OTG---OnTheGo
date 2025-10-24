@@ -4,6 +4,11 @@ instructions
 - Create a root folder (name this folde "hackathon)
 - Create a folder named "datasets"
 - Clone repositotry into root folder
+- Work in respective folder. 
+
+######## NOTICE #########
+
+If you need to use a large sized model, please push to a google drive and paste the link to the google drive in the instructions with instructions of the folder structure. Any added large files should stay out of the git file to avoid pushing extremely heay filss to the repositotry.
 
 ````````````````````````````
 Team Members - Role
