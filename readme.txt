@@ -2,13 +2,18 @@ This is a project for the Toyota GR hackathon project where we utilize the dta p
 
 instructions
 - Create a root folder (name this folde "hackathon)
-- Create a folder named "datasets"
+- Create a folder named "Datasets"
+    - Download datasets from this url: https://trddev.com/hackathon-2025/
+    - Unzip all datasets and place each folder into the Datasets folder.
+- Create a folder named "TrackMaps"
+    - Download track maps from this url: https://trddev.com/hackathon-2025/
+    - Unzip all maps and place each folder into the TrackMaps folder.
 - Clone repositotry into root folder
 - Work in respective folder. 
 
 ######## NOTICE #########
 
-If you need to use a large sized model, please push to a google drive and paste the link to the google drive in the instructions with instructions of the folder structure. Any added large files should stay out of the git file to avoid pushing extremely heay filss to the repositotry.
+If you need to use a large model, please upload it to Google Drive and include the link—along with clear folder structure instructions—in your submission. Make sure not to include large files in the Git repository to prevent pushing excessively heavy data to the repo. Please include your name and a date in the instruction you include.
 
 ````````````````````````````
 Team Members - Role
