@@ -1,6 +1,6 @@
 This is a project for the Toyota GR hackathon project where we utilize the dta provided to make a software that utilizes the power of AI to provided extensive breakdown of the performace of a driver and areas where improvements can e made. This would be integrated in a well designed software application.
 
-instructions
+Instructions
 - Create a root folder (name this folde "hackathon)
 - Create a folder named "Datasets"
     - Download data files from this url: https://trddev.com/hackathon-2025/
