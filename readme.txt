@@ -10,7 +10,7 @@ instructions
     - Unzip all maps and place each folder into the TrackMaps folder.
 - Clone repositotry into root folder
 - Work in respective folder. 
-
+- When you want to push code, please make sure to be in the OTG---OnTheGo folder.
 ######## NOTICE #########
 
 If you need to use a large model, please upload it to Google Drive and include the link—along with clear folder structure instructions—in your submission. Make sure not to include large files in the Git repository to prevent pushing excessively heavy data to the repo. Please include your name and a date in the instruction you include.
