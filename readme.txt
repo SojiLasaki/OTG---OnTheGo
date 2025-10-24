@@ -3,8 +3,8 @@ This is a project for the Toyota GR hackathon project where we utilize the dta p
 instructions
 - Create a root folder (name this folde "hackathon)
 - Create a folder named "Datasets"
-    - Download datasets from this url: https://trddev.com/hackathon-2025/
-    - Unzip all datasets and place each folder into the Datasets folder.
+    - Download data files from this url: https://trddev.com/hackathon-2025/
+    - Unzip all data files and place each folder into the Datasets folder.
 - Create a folder named "TrackMaps"
     - Download track maps from this url: https://trddev.com/hackathon-2025/
     - Unzip all maps and place each folder into the TrackMaps folder.
