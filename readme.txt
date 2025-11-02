@@ -47,3 +47,6 @@ Soji - October 24th, 2025
     - pip install dash plotly pandas numpy dash-bootstrap-components
     - pip install dash_daq  # for gauge/speedometer components
     - pip install scipy     # for signal filtering
+
+
+for the datasets, change the provisional results (not the grouped) to 03_results.CSV
