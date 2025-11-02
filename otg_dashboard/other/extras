@@ -1,0 +1,12 @@
+    dbc.Row([
+        dbc.Col([
+            html.Label("Select a value:", className="text-light"),
+            dcc.Slider(0, 10, 1, value=5, id='my-slider')
+        ], width=6),
+    ]),
+
+    dbc.Row([
+        dbc.Col([
+            html.H4(id='slider-output', className="text-center text-info mt-4")
+        ])
+    ])

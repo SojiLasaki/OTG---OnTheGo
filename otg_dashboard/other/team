@@ -1,0 +1,24 @@
+'''
+    dbc.Row(
+        dbc.Col([
+            html.Div([
+                html.H5("The Team:", className="text-center text-white mb-3 justify-content-center"),
+                html.Div([
+                    html.Div([
+                        # html.Img(
+                        #     src="../assets/IMG_8281.jpeg",
+                        #     style={"width": "400px", "height": "auto"},
+                        #     className="img-fluid mx-auto d-block rounded shadow"
+                        # ),
+                        html.H6("Soji Lasaki"),
+                        html.H6("Hamzat Tai"),
+                        html.H6("Nakshatra Bobilli"),
+                        html.H6("Tina Oyatobo")
+                    ],  className="d-flex flex-column justify-content-center align-items-center")
+
+                ])
+            ]),
+        ])
+    )
+    
+'''

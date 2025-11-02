@@ -1,0 +1,23 @@
+/* Input box background and text */
+.css-1s2u09g-control {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 1px solid #808080 !important;
+}
+
+/* Placeholder text */
+.css-1wa3eu0-placeholder {
+    color: #bbbbbb !important;
+}
+
+/* Dropdown menu */
+.css-1okebmr-menu {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+/* Dropdown option hover/focus */
+.css-yt9ioa-option:hover, .css-yt9ioa-option:focus {
+    background-color: #343a40 !important;
+    color: #ffffff !important;
+}
