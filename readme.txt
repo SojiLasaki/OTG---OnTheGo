@@ -29,3 +29,21 @@ Team Members - Role
 ````````````````````````````
 
 Project Commenecement date - October 22nd, 2025
+
+
+Soji - October 24th, 2025
+- Install latest version of python
+    - check python versioin with python3 --version
+    If python version is earlier than 3.9, upgrade python versioin with:
+        - python3 -m pip install --upgrade pi
+- Install virtualenv 
+    - python3 -m pip install virtualenv
+    - Create new virtualenv
+        - python3 -m venv venv
+    - Activate virtualenv
+        - source venv/bin/activate   # macOS/Linux
+        - venv\Scripts\activate      # Windows
+- Install packages
+    - pip install dash plotly pandas numpy dash-bootstrap-components
+    - pip install dash_daq  # for gauge/speedometer components
+    - pip install scipy     # for signal filtering
