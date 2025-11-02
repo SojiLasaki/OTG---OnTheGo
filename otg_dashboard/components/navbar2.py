@@ -3,7 +3,7 @@ from dash import html
 import dash_bootstrap_components as dbc
 
 # Navbar layout
-navbar = dbc.Navbar(
+navbar2 = dbc.Navbar(
     dbc.Container([
 
         # Brand text on the left
@@ -19,8 +19,8 @@ navbar = dbc.Navbar(
         dbc.Collapse(
             dbc.Nav(
                 [
-                    # dbc.NavLink("Home", href="/", className="ps-3 text-white"),
-                    dbc.NavLink("Overview", href="/", className="ps-3 text-white"),
+                    dbc.NavLink("Home", href="/", className="ps-3 text-white"),
+                    dbc.NavLink("Overview", href="/overview", className="ps-3 text-white"),
                     dbc.NavLink("Lap Analysis", href="/lap-analysis", className="ps-3 text-white"),
                     dbc.NavLink("System Check", href="/system-check", className="ps-3 text-white"),
                     dbc.NavLink("Compare", href="/compare", className="ps-3 text-white"),
@@ -32,10 +32,9 @@ navbar = dbc.Navbar(
             is_open=False,
             navbar=True,
         ),
-    ], 
-    className="p-0 w-100"),
+    ]),
     color="dark",
     dark=True,
     sticky="top",
-    className="mt-2 mb-3 p-0",
+    className="mt-2",
 )
