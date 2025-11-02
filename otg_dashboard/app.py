@@ -152,9 +152,28 @@ def update_overview(session_data):
         columns=[{"name": i, "id": i} for i in df.columns],
         page_size=100,
         style_table={"overflowX": "auto"},
-        style_cell={"textAlign": "center", "backgroundColor": "#0000", "color": "white"},
-        style_header={"backgroundColor": "#0000", "fontWeight": "bold"},
-    )
+        style_cell={
+            "textAlign": "center",
+            "backgroundColor": "#111",
+            "color": "white",
+        },
+        style_header={
+            "backgroundColor": "#333",
+            "fontWeight": "bold",
+        },
+        style_data_conditional=[  # remove hover highlights
+            {
+                "if": {"state": "active"},
+                "backgroundColor": "#111",
+                "color": "white",
+            },
+            {
+                "if": {"state": "selected"},
+                "backgroundColor": "#444",
+                "color": "white",
+            },
+        ]
+        )
 
     return summary, table
 # run app
