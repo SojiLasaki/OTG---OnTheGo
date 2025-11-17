@@ -22,34 +22,7 @@ search = dbc.Container([
             width=4,
             className="mb-3",
         ),
-        dbc.Col([
-            html.P("Race"),
-            dcc.Dropdown(
-                id="race-dropdown",
-                placeholder="Select Race",
-                clearable=False,
-                persistence_type='session',
-            )],
-            width=4,
-            className="mb-3",
-        ),
-        dbc.Col([
-            html.P("Vehicle Number"),
-            dcc.Dropdown(
-                id="vehicle-dropdown",
-                options=[
-                    {"label": "Driver A", "value": "driver_a"},
-                    {"label": "Driver B", "value": "driver_b"},
-                    {"label": "Driver C", "value": "driver_c"},
-                ],
-                placeholder="Select Vehicle",
-                clearable=False,
-                # style={"backgroundColor": "#000000", "color": "#ffffff"},
-                persistence_type='session',
-            )],
-            width=4,
-            className=""
-        ),
+ 
     ], className="justify-content-center"),
 
     dbc.Row(
