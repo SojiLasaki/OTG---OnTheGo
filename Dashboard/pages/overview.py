@@ -1,96 +1,76 @@
-from dash import html, dcc, register_page
+from dash import html, dcc, register_page, Output, Input, callback
 import dash_bootstrap_components as dbc
 import pandas as pd
-from components.search import search
 import plotly.graph_objs as go
-# Register the page
+from components.search import search
+
 register_page(__name__, path="/")
 
-selected_race = "Race 1"
-# --- Load CSV ---
-df = pd.read_csv(f"../../Datasets/Indianapolis/Race 1/26_weather_{selected_race}.csv", sep=";")
-
-# --- Create figures ---
-weather_air_temp = go.Figure()
-weather_track_temp = go.Figure()
-weather_humidity = go.Figure()
-weather_pressure = go.Figure()
-
-# --- Traces ---
-weather_air_temp.add_trace(go.Scatter(
-    y=df["AIR_TEMP"],
-    mode="lines+markers",
-    name="AIR_TEMP",
-    text=[f"WIND_DIRECTION: {wd}" for wd in df["WIND_DIRECTION"]],
-    hovertemplate='%{y} %{name}<br>%{text}<br>Time: %{x}<extra></extra>'
-))
-
-weather_track_temp.add_trace(go.Scatter(
-    y=df["TRACK_TEMP"],
-    mode="lines+markers",
-    name="TRACK_TEMP",
-    text=[f"WIND_DIRECTION: {wd}" for wd in df["WIND_DIRECTION"]],
-    hovertemplate='%{y} %{name}<br>%{text}<br>Time: %{x}<extra></extra>'
-))
-
-weather_humidity.add_trace(go.Scatter(
-    y=df["HUMIDITY"],
-    mode="lines+markers",
-    name="HUMIDITY",
-    text=[f"WIND_DIRECTION: {wd}" for wd in df["WIND_DIRECTION"]],
-    hovertemplate='%{y} %{name}<br>%{text}<br>Time: %{x}<extra></extra>'
-))
-
-weather_pressure.add_trace(go.Scatter(
-    y=df["PRESSURE"],
-    mode="lines+markers",
-    name="PRESSURE",
-    text=[f"WIND_DIRECTION: {wd}" for wd in df["WIND_DIRECTION"]],
-    hovertemplate='%{y} %{name}<br>%{text}<br>Time: %{x}<extra></extra>'
-))
-
-# --- Layout (shared settings) ---
-for fig in [weather_air_temp, weather_track_temp, weather_humidity, weather_pressure]:
-    fig.update_layout(
-        template="plotly_dark",
-        hovermode="x unified",
-        margin=dict(l=10, r=10, t=60, b=10),
-        height=250
-    )
-
-weather_air_temp.update_layout(title="Air Temp")
-weather_track_temp.update_layout(title="Track Temp")
-weather_humidity.update_layout(title="Humidity")
-weather_pressure.update_layout(title="Pressure")
-
-# --- Dash Layout ---
 layout = dbc.Container([
     search,
-    html.H6('Weather Review', className="mb-2"),
+    dcc.Store(id="session-store"),
+
+    # WRAPPER THAT CAN BE HIDDEN
+    html.Div([
+        html.H6('Weather Review', className="mt-4, mb-2"),
+        dbc.Row([
+            dbc.Col(dcc.Graph(id="air-temp-chart"), width=3),
+            dbc.Col(dcc.Graph(id="track-temp-chart"), width=3),
+            dbc.Col(dcc.Graph(id="humidity-chart"), width=3),
+            dbc.Col(dcc.Graph(id="pressure-chart"), width=3),
+        ], className="g-1")
+    ], id="weather-wrapper"),
 
     dbc.Row([
-        dbc.Col(dcc.Graph(figure=weather_air_temp, style={"height": "250px"}), width=3),
-        dbc.Col(dcc.Graph(figure=weather_track_temp, style={"height": "250px"}), width=3),
-        dbc.Col(dcc.Graph(figure=weather_humidity, style={"height": "250px"}), width=3),
-        dbc.Col(dcc.Graph(figure=weather_pressure, style={"height": "250px"}), width=3),
-    ], className="g-1"),
-
-    dcc.Store(id="session-store"),  # shared session data
-
-    dbc.Row([
-        dbc.Col([
-            html.H5("Race Overview", className="mt-3 text-center text-white "),
-            html.Hr()
-        ])
+        dbc.Col([html.H5("Race Overview", className="mt-3 text-center text-white"), html.Hr()])
     ]),
 
-    dbc.Row([
-        dbc.Col(html.Div(id="overview-summary"), width=12)
-    ]),
+    dbc.Row([dbc.Col(html.Div(id="overview-summary"), width=12)]),
+    dbc.Row([dbc.Col(html.Div(id="overview-table"), width=12)])
+], fluid=True, id="weather-wrapper", style={"margin": "0", "padding": "0"})
 
-    dbc.Row([
-        dbc.Col(html.Div(id="overview-table"), width=12, className="")
-    ]),
-], 
-fluid=True, 
-style={"margin": "0", "padding": "0"})
+
+def make_figure(df, col, title):
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        y=df[col],
+        mode="lines+markers",
+        text=[f"WIND_DIRECTION: {wd}" for wd in df["WIND_DIRECTION"]],
+        hovertemplate='%{y}<br>%{text}<extra></extra>'
+    ))
+    fig.update_layout(
+        template="plotly_dark",
+        title=title,
+        height=250,
+        margin=dict(l=10, r=10, t=60, b=10)
+    )
+    return fig
+
+
+@callback(
+    Output("air-temp-chart", "figure"),
+    Output("track-temp-chart", "figure"),
+    Output("humidity-chart", "figure"),
+    Output("pressure-chart", "figure"),
+    Output("weather-wrapper", "style"),   # <-- NEW OUTPUT
+    Input("session-store", "data")
+)
+def update_weather_charts(data):
+    if not data:
+        # Hide graph container
+        hidden = {"display": "none"}
+        return go.Figure(), go.Figure(), go.Figure(), go.Figure(), hidden
+
+    race = data["race"]
+    csv_path = f"../../Datasets/indianapolis/{race}/26_weather_{race}.csv"
+    df = pd.read_csv(csv_path, sep=";")
+
+    visible = {}  # show wrapper
+
+    return (
+        make_figure(df, "AIR_TEMP", "Air Temp"),
+        make_figure(df, "TRACK_TEMP", "Track Temp"),
+        make_figure(df, "HUMIDITY", "Humidity"),
+        make_figure(df, "PRESSURE", "Pressure"),
+        visible
+    )

@@ -4,8 +4,8 @@ import dash_bootstrap_components as dbc
 import os
 import pandas as pd
 
-datasets = [maps for maps in os.listdir("../../Datasets") if not maps.startswith(".")]
-datasets_capitalized = [folder.capitalize() for folder in datasets]
+# datasets = [maps for maps in os.listdir("../../Datasets") if not maps.startswith(".")]
+# datasets_capitalized = [folder.capitalize() for folder in datasets]
 
 search = dbc.Container([
     # html.Br(className="mb-1"),
