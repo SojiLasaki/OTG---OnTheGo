@@ -57,7 +57,6 @@ def make_figure(df, col, title):
 )
 def update_weather_charts(data):
     if not data:
-        # Hide graph container
         hidden = {"display": "none"}
         return go.Figure(), go.Figure(), go.Figure(), go.Figure(), hidden
 
