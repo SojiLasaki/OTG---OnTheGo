@@ -27,7 +27,7 @@ layout = dbc.Container([
 
     dbc.Row([dbc.Col(html.Div(id="overview-summary"), width=12)]),
     dbc.Row([dbc.Col(html.Div(id="overview-table"), width=12)])
-], fluid=True, id="weather-wrapper", style={"margin": "0", "padding": "0"})
+], fluid=True, style={"margin": "0", "padding": "0"})
 
 
 def make_figure(df, col, title):

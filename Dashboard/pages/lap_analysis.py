@@ -77,27 +77,75 @@ def make_figure(df, col, title):
     return fig
 
 
+# @callback(
+#     Output("lap_analysis", "figure"),
+#     Output("lap_analysis_wrapper", "style"),
+#     Input("session-store", 'data')
+# )
+# def update_lap_analysis(data):
+#     if not data:
+#         hidden = {'display': "none"}
+#         return go.Figure(), hidden
+    
+#     if data["race"] == "Race 1":
+#         race_abriv = "R1"
+#     else:
+#         race_abriv = "R2"
+        
+#     race = data["race"]
+#     csv_path = f"../../Datasets/indianapolis/{race}/{race_abriv}_indianapolis_motor_speedway_telemetry.CSV"
+#     df = pd.read_csv(csv_path, sep=";")
+#     print(df.head(1))
+#     visible = {}
+
+#     return (
+#         make_figure(df, "telemetry_value", "telemetry_value"),
+#         visible
+#     )
+
+# @callback(
+#     Input("session-data"),
+#     Output("driver_info")
+
+# )
+
+
 @callback(
     Output("lap_analysis", "figure"),
     Output("lap_analysis_wrapper", "style"),
-    Input("session-store", 'data')
+    Input("session-store", "data"),
+    Input("lap_slider", "value")
 )
-def update_lap_analysis(data):
+def update_lap_analysis(data, selected_lap):
+    # Hide when no session data yet
     if not data:
-        hidden = {'display': "none"}
-        return go.Figure(), hidden
-    
-    if data["race"] == "Race 1":
-        race_abriv = "R1"
-    else:
-        race_abriv = "R2"
-        
-    race = data["race"]
-    csv_path = f"../../Datasets/indianapolis/{race}/{race_abriv}_indianapolis_motor_speedway_telemetry.CSV"
-    df = pd.read_csv(csv_path, sep=";")
-    visible = {}
+        return go.Figure(), {"display": "none"}
 
-    return (
-        make_figure(df, "telemetry_value", "telemetry_value"),
-        visible
+    # Determine Race abbreviation
+    race_abriv = "R1" if data["race"] == "Race 1" else "R2"
+
+    # Load telemetry CSV
+    csv_path = (
+        f"../../Datasets/indianapolis/{data['race']}/"
+        f"{race_abriv}_indianapolis_motor_speedway_telemetry.CSV"
     )
+    df = pd.read_csv(csv_path, sep=";")
+
+    # ---- FILTER BY SELECTED LAP ----
+    df_lap = df[df["lap"] == selected_lap]
+
+    # If selected lap has no data → hide
+    if df_lap.empty:
+        return go.Figure(), {"display": "none"}
+
+    # ---- FILTER TELEMETRY TYPE (default: speed) ----
+    # You can change Speed → Throttle, Brake, RPM etc.
+    df_speed = df_lap[df_lap["telemetry_name"] == "Speed"]
+
+    if df_speed.empty:
+        return go.Figure(), {"display": "none"}
+
+    # Create figure
+    fig = make_figure(df_speed, "telemetry_value", f"Speed — Lap {selected_lap}")
+
+    return fig, {"display": "block"}
