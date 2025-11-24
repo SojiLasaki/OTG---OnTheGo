@@ -1,301 +1,242 @@
-# from dash import html, dcc, register_page, Output, Input, callback
-# import dash_bootstrap_components as dbc
-# import pandas as pd
-# import plotly.graph_objs as go
-# from components.search import search
-
-# register_page(__name__, path="/lap-analysis")
-
-# # ============================================================
-# # PAGE LAYOUT
-# # ============================================================
-# layout = dbc.Container([
-#     search,
-#     dcc.Store(id="session-store"),
-
-#     # ---------------- DRIVER INFO ----------------
-#     dbc.Row([
-#         dbc.Col(
-#             html.Div([
-#                 html.H6("Driver Information:"),
-#                 html.Hr(),
-#                 html.Div([
-#                     html.Div([
-#                         html.H6(["Number: ", html.Span(id="driver_number")]),
-#                         html.H6("|", className="px-3"),
-#                         html.H6(["Name: ", html.Span(id="driver_name")]),
-#                         html.H6("|", className="px-3"),
-#                         html.H6(["Position: ", html.Span(id="driver_position")]),
-#                         html.H6("|", className="px-3"),
-#                         html.H6(["Status: ", html.Span(id="driver_status")]),
-#                         html.H6("|", className="px-3"),
-#                         html.H6(["Vehicle: ", html.Span(id="driver_vehicle")]),
-#                         html.H6("|", className="px-3"),
-#                         html.H6(["Team: ", html.Span(id="driver_team")]),
-#                         html.H6("|", className="px-3"),
-#                         html.H6(["Laps: ", html.Span(id="driver_laps")]),
-#                         html.H6("|", className="px-3"),
-#                         html.H6(["Country: ", html.Span(id="driver_country")]),
-#                     ], className="ms-auto d-flex")
-#                 ], className="d-flex w-100"),
-#                 html.Hr()
-#             ])
-#         )
-#     ], className="mt-4"),
-
-#     # ---------------- LAP + GRAPH ----------------
-#     dbc.Row([
-#         dbc.Col([
-#             html.H6("Select Lap"),
-#             dcc.Slider(
-#                 min=1, max=23, step=1, id="lap_slider",
-#                 marks=None,
-#                 tooltip={"placement": "bottom", "always_visible": True,
-#                          "style": {"color": "white", "fontSize": "10px"}}
-#             ),
-#             html.Div([
-#                 dbc.Col(dcc.Graph(id="lap_analysis")),
-#                 html.Hr()
-#             ], id="lap_analysis_wrapper", style={"margin": "0", "padding": "0"}),
-#         ])
-#     ])
-# ])
-
-# # ============================================================
-# # FIGURE MAKER
-# # ============================================================
-# def make_figure(df, col, title):
-#     fig = go.Figure()
-
-#     fig.add_trace(go.Scattergl(
-#         x=df["timestamp"],
-#         y=df[col],
-#         mode="lines",
-#         line=dict(width=2, color=df["timestamp"], colorscale="Viridis"),
-#         text=[
-#             f"Speed: {v}<br>"
-#             f"Lap: {l}<br>"
-#             f"Time: {t}"
-#             for v, l, t in zip(df[col], df["lap"], df["timestamp"])
-#         ],
-#         hovertemplate="%{text}<extra></extra>"
-#     ))
-
-#     fig.update_layout(
-#         template="plotly_dark",
-#         title=title,
-#         height=300,
-#         margin=dict(l=10, r=10, t=50, b=10)
-#     )
-#     return fig
-
-
-# # ============================================================
-# # UPDATE LAP FIGURE
-# # ============================================================
-# @callback(
-#     Output("lap_analysis", "figure"),
-#     Output("lap_analysis_wrapper", "style"),
-#     Input("session-store", "data"),
-#     Input("lap_slider", "value")
-# )
-# def update_lap_analysis(data, selected_lap):
-
-#     if not data or not selected_lap:
-#         return go.Figure(), {"display": "none"}
-
-#     race = data["race"]
-#     driver = data["vehicle"]
-
-#     # ---- Correct dynamic lap file ----
-#     csv_path = (
-#         f"../../../telemetry_split/{race}/driver_{driver}/lap_{selected_lap}.csv"
-#     )
-#     print(csv_path)
-
-#     try:
-#         df = pd.read_csv(csv_path)
-#     except FileNotFoundError:
-#         # No data for this lap
-#         return go.Figure(), {"display": "none"}
-
-#     # ---- Clean columns ----
-#     df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
-#     df["telemetry_value"] = pd.to_numeric(df["telemetry_value"], errors="coerce")
-
-#     print(df.head())
-#     print(df)
-
-#     # ---- Filter Speed channel ----
-#     df_speed = df[df["telemetry_name"].str.lower() == "speed"]
-#     if df_speed.empty:
-#         return go.Figure(), {"display": "none"}
-
-#     # ---- Build final figure ----
-#     fig = make_figure(df_speed, "telemetry_value", f"Speed — Lap {selected_lap}")
-
-#     return fig, {"display": "block"}
-
-
-# # ============================================================
-# # DRIVER INFO CALLBACK
-# # ============================================================
-# @callback(
-#     Output("driver_number", "children"),
-#     Output("driver_name", "children"),
-#     Output("driver_position", "children"),
-#     Output("driver_status", "children"),
-#     Output("driver_vehicle", "children"),
-#     Output("driver_team", "children"),
-#     Output("driver_laps", "children"),
-#     Output("driver_country", "children"),
-#     Input("session-store", "data")
-# )
-# def update_driver_info(data):
-
-#     if not data:
-#         return [""] * 8
-
-#     csv_path = f"../../Datasets/indianapolis/{data['race']}/03_results.CSV"
-#     df = pd.read_csv(csv_path, sep=";")
-
-#     row = df[df["NUMBER"] == int(data["vehicle"])].iloc[0]
-
-#     return (
-#         row["NUMBER"],
-#         f"{row['DRIVER_FIRSTNAME']} {row['DRIVER_SECONDNAME']}",
-#         row["POSITION"],
-#         row["STATUS"],
-#         row["VEHICLE"],
-#         row["TEAM"],
-#         row["LAPS"],
-#         row["DRIVER_COUNTRY"],
-#     )
-
 from dash import html, dcc, register_page, Output, Input, callback
 import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.graph_objs as go
-import os
-
 from components.search import search
+import os
 
 register_page(__name__, path="/lap-analysis")
 
+# ------------------------------------------------------------
+# TELEMETRY CHANNELS
+# ------------------------------------------------------------
+ENGINE_CHANNELS = ["speed", "nmot"]
+PEDAL_CHANNELS = ["aps", "pbrake_f", "pbrake_r"]
+GFORCE_CHANNELS = ["accx_can", "accy_can"]
 
-# ============================================================
+HOVER_EXTRA = [
+    "Steering_Angle",
+    "Laptrigger_lapdist_dls",
+    "VBOX_Long_Minutes",
+    "VBOX_Lat_Min",
+]
+
+# ------------------------------------------------------------
 # PAGE LAYOUT
-# ============================================================
+# ------------------------------------------------------------
 layout = dbc.Container([
-
     search,
     dcc.Store(id="session-store"),
-
-    html.Br(),
+    # ---------------- DRIVER INFO ----------------
+    dbc.Row([
+        dbc.Col(
+            html.Div([
+                html.H6("Driver Information:"),
+                html.Hr(),
+                html.Div([
+                    html.Div([
+                        html.H6(["Number: ", html.Span(id="driver_number")]),
+                        html.H6("|", className="px-3"),
+                        html.H6(["Name: ", html.Span(id="driver_name")]),
+                        html.H6("|", className="px-3"),
+                        html.H6(["Position: ", html.Span(id="driver_position")]),
+                        html.H6("|", className="px-3"),
+                        html.H6(["Status: ", html.Span(id="driver_status")]),
+                        html.H6("|", className="px-3"),
+                        html.H6(["Vehicle: ", html.Span(id="driver_vehicle")]),
+                        html.H6("|", className="px-3"),
+                        html.H6(["Team: ", html.Span(id="driver_team")]),
+                        html.H6("|", className="px-3"),
+                        html.H6(["Laps: ", html.Span(id="driver_laps")]),
+                        html.H6("|", className="px-3"),
+                        html.H6(["Country: ", html.Span(id="driver_country")]),
+                    ], className="ms-auto d-flex", style={"margin":"auto"})
+                ], className="d-flex w-100"),
+                html.Hr()
+            ])
+        )
+    ], className="mt-4"),
     html.H6("Select Lap"),
 
     dcc.Slider(
         min=1, max=23, step=1, id="lap_slider",
         marks=None,
-        tooltip={"placement": "bottom", "always_visible": True,
-                 "style": {"color": "white", "fontSize": "10px"}}
-    ),
-
-    html.Br(),
-
-    html.H6("Select Telemetry Channel(s)"),
-    dcc.Dropdown(
-        id="telemetry_filter",
-        multi=True,
-        placeholder="Choose telemetry channels (e.g., speed, aps, gear)..."
+        tooltip={"placement": "bottom", "always_visible": True},
     ),
 
     html.Hr(),
 
-    dcc.Graph(id="lap_graph", style={"height": "700px"}),
+    # ----------- ROW 1: Speed + RPM -----------------
+    dbc.Row([
+        dbc.Col(dcc.Graph(id="speed_graph", style={"height": "300px"}), md=6),
+        dbc.Col(dcc.Graph(id="rpm_graph", style={"height": "300px"}), md=6),
+    ]),
+
+    # ----------- ROW 2: Throttle + Brake F + Brake R --------
+    dbc.Row([
+        dbc.Col(dcc.Graph(id="throttle_graph", style={"height": "300px"}), md=4),
+        dbc.Col(dcc.Graph(id="brake_f_graph", style={"height": "300px"}), md=4),
+        dbc.Col(dcc.Graph(id="brake_r_graph", style={"height": "300px"}), md=4),
+    ]),
+
+    # ----------- ROW 3: ACCX + ACCY -----------------
+    dbc.Row([
+        dbc.Col(dcc.Graph(id="accx_graph", style={"height": "300px"}), md=6),
+        dbc.Col(dcc.Graph(id="accy_graph", style={"height": "300px"}), md=6),
+    ]),
 
 ], fluid=True)
 
 
-# ============================================================
-# UPDATE GRAPH
-# ============================================================
 @callback(
-    Output("telemetry_filter", "options"),
-    Output("lap_graph", "figure"),
+    Output("speed_graph", "figure"),
+    Output("rpm_graph", "figure"),
+    Output("throttle_graph", "figure"),
+    Output("brake_f_graph", "figure"),
+    Output("brake_r_graph", "figure"),
+    Output("accx_graph", "figure"),
+    Output("accy_graph", "figure"),
     Input("session-store", "data"),
     Input("lap_slider", "value"),
-    Input("telemetry_filter", "value")
 )
-def update_lap_graph(data, lap, selected_channels):
+def update_lap_graphs(data, lap):
 
-    empty_fig = go.Figure()
+    empty = go.Figure().update_layout(template="plotly_dark")
 
-    # No session or no lap: nothing to show
     if not data or lap is None:
-        return [], empty_fig
+        return empty, empty, empty, empty, empty, empty, empty
 
     race = data.get("race")
     driver = data.get("vehicle")
-
     if not race or not driver:
-        return [], empty_fig
-
-    # ============================================================
-    # DYNAMIC CSV PATH USING driver_{driver}
-    # ============================================================
+        return empty, empty, empty, empty, empty, empty, empty
 
     csv_path = f"../../telemetry_split/{race}/driver_{driver}/lap_{lap}.csv"
-
-    print("🔍 Loading CSV:", csv_path)
+    print("Loading:", csv_path)
 
     if not os.path.exists(csv_path):
-        print("CSV not found:", csv_path)
-        return [], empty_fig
+        print("CSV missing")
+        return empty, empty, empty, empty, empty, empty, empty
 
-    # Load CSV
-    try:
-        df = pd.read_csv(csv_path)
-    except Exception as e:
-        print("Error loading CSV:", e)
-        return [], empty_fig
-
-    # Ensure correct types
+    df = pd.read_csv(csv_path)
     df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
     df["telemetry_value"] = pd.to_numeric(df["telemetry_value"], errors="coerce")
 
-    # All unique telemetry channels
-    telemetry_options = sorted(df["telemetry_name"].unique())
+    # ---------------------- FIXED HOVER VALUES ----------------------
+    # Convert each HOVER_EXTRA telemetry into a dictionary keyed by timestamp
+    hover_data = {}
 
-    # If none selected yet, default to all
-    if not selected_channels or len(selected_channels) == 0:
-        selected_channels = telemetry_options
+    for hov in HOVER_EXTRA:
+        hov_df = df[df["telemetry_name"] == hov]
+        hover_data[hov] = dict(zip(hov_df["timestamp"], hov_df["telemetry_value"]))
 
-    # ============================================================
-    # BUILD WEBGL GRAPH
-    # ============================================================
-    fig = go.Figure()
+    # ---------------------- COLOR SET ----------------------
+    COLORS = {
+        "speed": "#1f77b4",
+        "nmot": "#ff7f0e",
+        "aps": "#2ca02c",
+        "pbrake_f": "#d62728",
+        "pbrake_r": "#9467bd",
+        "accx_can": "#8c564b",
+        "accy_can": "#e377c2",
+    }
 
-    for channel in selected_channels:
-        channel_df = df[df["telemetry_name"] == channel]
+    # ----------- Helper: build a single channel chart -----------
+    def build_chart(channel, title):
+        sub = df[df["telemetry_name"] == channel]
+
+        if sub.empty:
+            return empty
+
+        # Build customdata row-by-row properly
+        customdata = []
+        for ts in sub["timestamp"]:
+            customdata.append([
+                hover_data["Steering_Angle"].get(ts),
+                hover_data["Laptrigger_lapdist_dls"].get(ts),
+                hover_data["VBOX_Long_Minutes"].get(ts),
+                hover_data["VBOX_Lat_Min"].get(ts),
+            ])
+
+        fig = go.Figure()
 
         fig.add_trace(go.Scattergl(
-            x=channel_df["timestamp"],
-            y=channel_df["telemetry_value"],
+            x=sub["timestamp"],
+            y=sub["telemetry_value"],
             mode="lines",
             name=channel,
-            hovertemplate="Time: %{x}<br>Value: %{y}<extra></extra>"
+            line=dict(color=COLORS.get(channel, "#FFFFFF")),
+            customdata=customdata,
+            hovertemplate=(
+                "Time: %{x}<br>"
+                f"{channel}: %{{y}}<br><br>"
+                "Steering: %{customdata[0]}<br>"
+                "Lap Dist: %{customdata[1]}<br>"
+                "VBOX Long: %{customdata[2]}<br>"
+                "VBOX Lat: %{customdata[3]}<br>"
+            ),
         ))
 
-    fig.update_layout(
-        template="plotly_dark",
-        title=f"Lap {lap} — Driver {driver} — Telemetry",
-        xaxis_title="Timestamp",
-        yaxis_title="Telemetry Value",
-        height=700,
-        margin=dict(l=20, r=20, t=50, b=20),
-        legend=dict(font=dict(size=10))
+        fig.update_layout(
+            template="plotly_dark",
+            title=title,
+            margin=dict(l=10, r=10, t=40, b=10),
+        )
+
+        return fig
+
+    # ----------- Build all 7 charts -----------
+    speed_fig = build_chart("speed", "Speed (km/h)")
+    rpm_fig = build_chart("nmot", "RPM")
+    throttle_fig = build_chart("aps", "Throttle (%)")
+    brake_f_fig = build_chart("pbrake_f", "Brake Front (%)")
+    brake_r_fig = build_chart("pbrake_r", "Brake Rear (%)")
+    accx_fig = build_chart("accx_can", "ACC X (G)")
+    accy_fig = build_chart("accy_can", "ACC Y (G)")
+
+    return speed_fig, rpm_fig, throttle_fig, brake_f_fig, brake_r_fig, accx_fig, accy_fig
+
+
+# ============================================================
+# DRIVER INFO CALLBACK (unchanged)
+# ============================================================
+@callback(
+    Output("driver_number", "children"),
+    Output("driver_name", "children"),
+    Output("driver_position", "children"),
+    Output("driver_status", "children"),
+    Output("driver_vehicle", "children"),
+    Output("driver_team", "children"),
+    Output("driver_laps", "children"),
+    Output("driver_country", "children"),
+    Input("session-store", "data")
+)
+def update_driver_info(data):
+    if not data:
+        return [""] * 8
+
+    csv_path = f"../../Datasets/indianapolis/{data['race']}/03_results.CSV"
+    df = pd.read_csv(csv_path, sep=";")
+
+    row = df[df["NUMBER"] == int(data["vehicle"])].iloc[0]
+
+    return (
+        row["NUMBER"],
+        f"{row['DRIVER_FIRSTNAME']} {row['DRIVER_SECONDNAME']}",
+        row["POSITION"],
+        row.get("STATUS", ""),
+        row["VEHICLE"],
+        row["TEAM"],
+        row["LAPS"],
+        row["DRIVER_COUNTRY"],
     )
 
-    return telemetry_options, fig
-# /Users/oluwasojilasaki/Downloads/Hackathon/telemetry_split/Race 1/driver_0
+# load graph on search
+@callback(
+    Output("lap_slider", "value"),
+    Input("session-store", "data")
+)
+def initialize_lap_slider(data):
+    if not data:
+        return None  # No race loaded yet
+    return 1  # Default lap to 1 whenever data is loaded
