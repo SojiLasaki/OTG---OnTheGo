@@ -22,6 +22,7 @@ navbar = dbc.Navbar(
                     # dbc.NavLink("Home", href="/", className="ps-3 text-white"),
                     dbc.NavLink("Overview", href="/", className="ps-3 text-white"),
                     dbc.NavLink("Lap Analysis", href="/lap-analysis", className="ps-3 text-white"),
+                    dbc.NavLink('Compare', href="/compare", className="ps-3 text-white"),
                     # dbc.NavLink("System Check", href="/system-check", className="ps-3 text-white"),
                     # dbc.NavLink("Compare", href="/compare", className="ps-3 text-white"),
                 ],
