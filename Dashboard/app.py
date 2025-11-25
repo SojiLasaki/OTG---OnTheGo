@@ -6,7 +6,7 @@ from components.search import search
 import os
 from dash.exceptions import PreventUpdate
 import pandas as pd
-
+from components.footer import footer
 session_data = {}
 
 datasets = "../../Datasets/indianapolis/"
@@ -24,6 +24,7 @@ app.layout = dbc.Container([
     dcc.Store(id="session-store", storage_type="session"),
     navbar,
     dash.page_container,
+    footer,
 ], fluid=True)
 
 @app.callback(

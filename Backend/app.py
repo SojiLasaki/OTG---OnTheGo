@@ -1,10 +1,10 @@
 from openai import OpenAI
 import os
 import pandas as pd
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 
-load_dotenv()
+# load_dotenv()
 
 app = Flask(__name__)
 
