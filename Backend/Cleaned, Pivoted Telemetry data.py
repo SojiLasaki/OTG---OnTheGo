@@ -118,4 +118,41 @@ for metric in metrics:
     plt.ylabel(metric.replace('_', ' ').title())
     plt.xticks(rotation=45)
     plt.show()
+import math
+import pandas as pd
+
+# Haversine distance (meters)
+def haversine(lat1, lon1, lat2, lon2):
+    R = 6371000
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
+
+    a = math.sin(dphi / 2)**2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2)**2
+    return 2 * R * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+# Load your data
+df = pd.read_csv(r"/Users/khush/Downloads/indianapolis/R1_indianapolis_motor_speedway_telemetry")
+df = df.sort_values("timestamp")
+
+# SPEED (meters per second)
+speeds = [0]
+for i in range(1, len(df)):
+    d = haversine(df.lat.iloc[i-1], df.lon.iloc[i-1],
+                  df.lat.iloc[i], df.lon.iloc[i])
+    t = df.timestamp.iloc[i] - df.timestamp.iloc[i-1]
+    speeds.append(d / t if t > 0 else 0)
+
+df["speed_mps"] = speeds
+
+# ACCELERATION (m/s²)
+df["acceleration"] = df["speed_mps"].diff() / df["timestamp"].diff()
+
+# BRAKING INTENSITY (only negative acceleration)
+df["brake_intensity"] = df["acceleration"].apply(lambda a: abs(a) if a < 0 else 0)
+
+# SMOOTHNESS (jerk = rate of change of acceleration)
+df["jerk"] = df["acceleration"].diff() / df["timestamp"].diff()
+
+print(df.head())
 
