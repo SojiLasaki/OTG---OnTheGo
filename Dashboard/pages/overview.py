@@ -9,7 +9,22 @@ register_page(__name__, path="/")
 layout = dbc.Container([
     search,
     dcc.Store(id="session-store"),
+    dbc.Row([
+        dbc.Col([html.H5("Race Overview", className="mt-3 text-center text-white"), html.Hr()])
+    ]),
+    dbc.Row(
+        html.Img(src="/assets/Indy_Circuit_Map.jpg", className="mx-auto",     
+            style={
+                "alignItems": "center",
+                "justifyContent": "center",
+                "marginTop": "20px",
+                "marginBottom": "20px",
+                "width": "200px"
+            }
+        )
+    ),
 
+    dbc.Row([dbc.Col(html.Div(id="overview-summary"), width=12)]),
     # WRAPPER THAT CAN BE HIDDEN
     html.Div([
         html.H6('Weather Review', className="mt-4, mb-2"),
@@ -20,13 +35,7 @@ layout = dbc.Container([
             dbc.Col(dcc.Graph(id="pressure-chart"), width=3),
         ], className="g-1")
     ], id="weather-wrapper"),
-
-    dbc.Row([
-        dbc.Col([html.H5("Race Overview", className="mt-3 text-center text-white"), html.Hr()])
-    ]),
-
-    dbc.Row([dbc.Col(html.Div(id="overview-summary"), width=12)]),
-    dbc.Row([dbc.Col(html.Div(id="overview-table"), width=12)])
+    dbc.Row([dbc.Col(html.Div(id="overview-table"), width=12)]),
 ], fluid=True, style={"margin": "0", "padding": "0"})
 
 

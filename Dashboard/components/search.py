@@ -10,7 +10,7 @@ import pandas as pd
 search = dbc.Container([
     # html.Br(className="mb-1"),
     dbc.Row([
-        html.H3("Indianapolis 2025",  style={ "textAlign": "center"}),
+        html.H6("Indianapolis 2025",  style={ "textAlign": "center"}),
         html.Hr(),
         dbc.Col([
             html.P("Race"),
