@@ -1,7 +1,23 @@
 This is a project for the Toyota GR hackathon project where we utilize the dta provided to make a software that utilizes the power of AI to provided extensive breakdown of the performace of a driver and areas where improvements can e made. This would be integrated in a well designed software application.
 
+----------------------------------------------------------------------------------------------------------------
 
-Instructions:
+for the datasets, change the provisional results (not the grouped) to 03_results.CSV
+------ PLEASE READ ------------
+--- to run project
+- Create a root folder
+    - Create "Datasets" folder
+- Download indianapolis dataset 
+    - Place unzipped folder into Datasets folder
+- Clone repo into root folder
+    - open into OTG---OnTheGo/Dashboard in your code editor
+    - run adjust_csv.py (This would filter the csv file for the telemetry)
+- Run the venv with "source venv/bin/activate"
+- Run root app.py
+
+----------------------------------------------------------------------------------------------------------------
+
+Instructions for teammates:
 - Create a root folder (name this folde "hackathon)
 - Create a folder named "Datasets"
     - Download data files from this url: https://trddev.com/hackathon-2025/
@@ -30,7 +46,7 @@ Team Members - Role
 
 Project Commenecement date - October 22nd, 2025
 
-
+// ignoew //////////////////////////////////////////////////////////////////////////
 Soji - October 24th, 2025
 - Install latest version of python
     - check python versioin with python3 --version
@@ -47,6 +63,4 @@ Soji - October 24th, 2025
     - pip install dash plotly pandas numpy dash-bootstrap-components
     - pip install dash_daq  # for gauge/speedometer components
     - pip install scipy     # for signal filtering
-
-
-for the datasets, change the provisional results (not the grouped) to 03_results.CSV
+///////////////////////////////////////////////////////////////////////////////////
